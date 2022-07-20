@@ -1,7 +1,22 @@
 <script>
   import { push } from 'svelte-spa-router'
+  import { onAuthStateChanged } from 'firebase/auth'
+  import { signOut } from 'firebase/auth'
+  import auth from '../firebase'
+  import { name } from '../store/store'
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      name.set(user.displayName)
+      push('/home')
+    } else {
+      push('/')
+    }
+  })
 
   const logout = () => {
+    signOut(auth)
+    name.set('')
     push('/')
   }
 
@@ -13,14 +28,14 @@
 
 <style>
   .container {
-    max-width: 400px;
+    max-width: 1024px;
     margin: 30px auto;
   }
 
   section {
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-around;
   }
 
   button {

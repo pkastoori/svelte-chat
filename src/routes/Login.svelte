@@ -1,7 +1,18 @@
 <script>
   import { link, push } from 'svelte-spa-router'
+  import auth from '../firebase'
+  import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth'
 
-  const login = () => {
+  let user = { username: '', email: '', password: '', confirmPassword: '' }
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      push('/home')
+    }
+  })
+
+  const login = async () => {
+    await signInWithEmailAndPassword(auth, user.email, user.password)
     push('/home')
   }
 </script>
@@ -63,16 +74,16 @@
 
 <div class="container">
   <fieldset>
-    <label for="name">Username</label>
-    <input type="text" name="username" id="username" />
-  </fieldset>
-  <fieldset>
     <label for="email">Email</label>
-    <input type="email" name="email" id="email" />
+    <input bind:value={user.email} type="email" name="email" id="email" />
   </fieldset>
   <fieldset>
     <label for="password">Password</label>
-    <input type="password" name="password" id="password" />
+    <input
+      bind:value={user.password}
+      type="password"
+      name="password"
+      id="password" />
   </fieldset>
   <fieldset>
     <button type="submit" on:click={login}>Login</button>
