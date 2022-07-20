@@ -3,7 +3,9 @@
   import auth from '../firebase'
   import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth'
 
-  let user = { username: '', email: '', password: '', confirmPassword: '' }
+  let user = { email: '', password: '' }
+  let error = { email: '', password: '' }
+  let valid = false
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
@@ -12,8 +14,28 @@
   })
 
   const login = async () => {
-    await signInWithEmailAndPassword(auth, user.email, user.password)
-    push('/home')
+    valid = true
+
+    if (user.email.length < 1) {
+      valid = false
+      error.email = 'Email cannot be blank'
+    } else {
+      valid = true
+      error.email = ''
+    }
+
+    if (user.password.length < 8) {
+      valid = false
+      error.password = 'Password should be atleast 8 characters'
+    } else {
+      valid = true
+      error.password = ''
+    }
+
+    if (valid) {
+      await signInWithEmailAndPassword(auth, user.email, user.password)
+      push('/home')
+    }
   }
 </script>
 
@@ -24,58 +46,13 @@
     background-color: rgb(149, 228, 127);
     padding: 20px;
   }
-
-  fieldset {
-    border: none;
-  }
-
-  input {
-    display: block;
-    margin: 8px;
-    border-style: none;
-    width: 90%;
-    padding: 6px;
-    border-radius: 2px;
-  }
-
-  input:focus {
-    outline: none;
-  }
-
-  button {
-    margin: 0 auto;
-    padding: 10px 30px;
-    font-size: 15px;
-    border: none;
-    display: block;
-    cursor: pointer;
-    background-color: #e8daa5;
-    opacity: 0.6;
-    transition: 0.3s;
-  }
-
-  button:hover {
-    opacity: 1;
-  }
-
-  button:active {
-    transform: translateY(4px);
-  }
-
-  p {
-    text-align: center;
-  }
-
-  a {
-    text-decoration: none;
-    color: black;
-  }
 </style>
 
 <div class="container">
   <fieldset>
     <label for="email">Email</label>
     <input bind:value={user.email} type="email" name="email" id="email" />
+    <p class="error">{error.email}</p>
   </fieldset>
   <fieldset>
     <label for="password">Password</label>
@@ -84,6 +61,7 @@
       type="password"
       name="password"
       id="password" />
+    <p class="error">{error.password}</p>
   </fieldset>
   <fieldset>
     <button type="submit" on:click={login}>Login</button>

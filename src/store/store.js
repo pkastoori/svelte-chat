@@ -6,6 +6,7 @@ export const messages = writable([
     text: 'Hi Gayatri',
     sender: 'Pushkar Kastoori',
     receiver: 'abc',
+    createdAt: Date.now(),
   },
 ])
 

@@ -1,4 +1,6 @@
 <script>
+  import { format } from 'timeago.js'
+
   export let message
   export let own
 </script>
@@ -43,5 +45,5 @@
   <div class="messageTop">
     <p class="messageText">{message.text}</p>
   </div>
-  <div class="messageBottom">21 mins ago</div>
+  <div class="messageBottom">{format(message.createdAt)}</div>
 </div>

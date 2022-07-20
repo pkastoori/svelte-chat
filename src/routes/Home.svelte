@@ -38,7 +38,7 @@
     justify-content: space-around;
   }
 
-  button {
+  .logout {
     padding: 10px 30px;
     font-size: 15px;
     border: none;
@@ -48,11 +48,11 @@
     transition: 0.3s;
   }
 
-  button:hover {
+  .logout:hover {
     opacity: 1;
   }
 
-  button:active {
+  .logout:active {
     transform: translateY(4px);
   }
 
@@ -70,19 +70,12 @@
     background-color: rgb(149, 228, 127);
     padding: 0 10px;
   }
-
-  img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
 </style>
 
 <div class="container">
   <section>
     <h3>Chats</h3>
-    <button on:click={logout}>Logout</button>
+    <button class="logout" on:click={logout}>Logout</button>
   </section>
   <div class="chats">
     <div class="chat" on:click={showChat}>

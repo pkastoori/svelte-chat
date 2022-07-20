@@ -7,6 +7,7 @@
   import { name, messages } from '../store/store'
 
   export let params = {}
+  let msgText
 
   function scrollDown() {
     document
@@ -25,6 +26,21 @@
   onMount(() => {
     scrollDown()
   })
+
+  function sendMessage() {
+    let message = {}
+    message.text = msgText
+    message.id = $messages.length + 1
+    message.sender = $name
+    message.receiver = 'abc'
+    message.createdAt = Date.now()
+    console.log(message)
+    messages.update((currentMessages) => {
+      let messageList = [message, ...currentMessages]
+      return messageList
+    })
+    msgText = ''
+  }
 </script>
 
 <style>
@@ -49,31 +65,6 @@
     position: fixed;
     top: 0;
     width: 1005px;
-  }
-
-  button {
-    padding: 10px 30px;
-    font-size: 15px;
-    border: none;
-    cursor: pointer;
-    background-color: #e8daa5;
-    opacity: 0.6;
-    transition: 0.3s;
-  }
-
-  button:hover {
-    opacity: 1;
-  }
-
-  button:active {
-    transform: translateY(4px);
-  }
-
-  img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
   }
 
   .chatBoxTop {
@@ -144,8 +135,8 @@
       </div>
     </div>
     <div class="chatBoxBottom">
-      <textarea class="chatMessageInput" />
-      <button class="chatSubmitButton">Send</button>
+      <textarea class="chatMessageInput" bind:value={msgText} />
+      <button class="chatSubmitButton" on:click={sendMessage}>Send</button>
     </div>
   </div>
 </div>
